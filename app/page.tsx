@@ -10,15 +10,27 @@ import {
   GizmoViewcube,
   GizmoViewport,
 } from "@react-three/drei";
+import { useControls } from "leva";
+import { color } from "three/tsl";
 
 function AnimatedBox() {
   const boxRef = useRef<THREE.Mesh>(null);
 
+  const { color, speed } = useControls({
+    color: "#00bfff",
+    speed: {
+      value: 0.005,
+      min: 0.0,
+      max: 0.03,
+      step: 0.001,
+    },
+  });
+
   useFrame(() => {
     if (boxRef.current) {
-      boxRef.current.rotation.x += 0.005;
-      boxRef.current.rotation.y += 0.005;
-      boxRef.current.rotation.z += 0.005;
+      boxRef.current.rotation.x += speed;
+      boxRef.current.rotation.y += speed;
+      boxRef.current.rotation.z += speed;
     }
   });
 
@@ -28,7 +40,7 @@ function AnimatedBox() {
       <axesHelper args={[10]} />
 
       {/* <sphereGeometry args={[3, 20, 20]} /> */}
-      <meshStandardMaterial color={0x00bfff} />
+      <meshStandardMaterial color={color} />
     </mesh>
   );
 }
